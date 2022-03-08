@@ -1,18 +1,20 @@
 package CompanySystem;
 
-import java.util.ArrayList;
+import CompanySystem.beans.*;
+
+import java.util.LinkedList;
 import java.util.List;
 
 public class FactoryUtils {
     private static int countOffice = 1;
 
-    public static int randNum(int min, int max) {
+    public static double randNum(int min, int max) {
         return (int) (Math.random() * (max - min + 1)) + min;
     }
 
-    public static Employee initEmployee() {
-        return new Employee(Name.getRandName(), FactoryUtils.randNum(3_500, 7_000));
-    }
+//    public static Employee initEmployee() {
+//        return new Employee(Name.getRandName(), FactoryUtils.randNum(3_500, 7_000));
+//    }
 
     public static Secretary initSecretary() {
         int officeCount = countOffice++;
@@ -31,66 +33,39 @@ public class FactoryUtils {
         return new Director(Name.getRandName(), FactoryUtils.randNum(18_000, 35_000), "Computers", "IT");
     }
 
-    public static double randSalary(Employee employee) {
-        if (employee instanceof Secretary) {
+    public static double randSalary(Class<?> clazz) {
+        if (clazz.equals(Secretary.class)) {
             return FactoryUtils.randNum(7_000, 8_500);
-        } else if (employee instanceof Engineer) {
+        }
+        if (clazz.equals(Engineer.class)) {
             return FactoryUtils.randNum(9_000, 11_000);
-        } else if (employee instanceof Director) {
+        }
+        if (clazz.equals(Director.class)) {
             return FactoryUtils.randNum(18_000, 35_000);
-        } else if (employee instanceof Manager) {
+        }
+        if (clazz.equals(Manager.class)) {
             return FactoryUtils.randNum(12_000, 15_500);
         } else {
             return FactoryUtils.randNum(3_500, 7_000);
         }
     }
 
-    public static List<Employee> initEmployees(int numOfSecretaries, int numOfManagers, int numOfEmployees, int numOfDirectors, int numOfEngineers) {
-        List<Employee> employees = new ArrayList<>();
+    public static List<Employee> initEmployees(int numOfSecretaries, int numOfManagers, int numOfDirectors, int numOfEngineers) {
+        List<Employee> employees = new LinkedList<>();
         for (int i = 0; i < numOfSecretaries; i++) {
+//            employees.add(Name.getRandName(), randSalary(Employee.class(;
             employees.add(initSecretary());
         }
-        for (int i = numOfSecretaries; i < numOfSecretaries + numOfEmployees; i++) {
-            employees.add(initEmployee());
-        }
-        for (int i = numOfSecretaries + numOfSecretaries; i < numOfSecretaries + numOfEmployees + numOfManagers; i++) {
+        for (int i = numOfSecretaries; i < numOfSecretaries + numOfManagers; i++) {
             employees.add(initManager());
         }
-        for (int i = numOfSecretaries + numOfEmployees + numOfManagers; i < numOfSecretaries + numOfEmployees + numOfManagers + numOfEngineers; i++) {
+        for (int i = numOfSecretaries + numOfManagers; i < numOfSecretaries + numOfManagers + numOfEngineers; i++) {
             employees.add(initEngineer());
         }
-        for (int i = numOfSecretaries + numOfEmployees + numOfManagers + numOfEngineers; i < numOfSecretaries + numOfEmployees + numOfManagers + numOfEngineers + numOfDirectors; i++) {
+        for (int i = numOfSecretaries + numOfManagers + numOfEngineers; i < numOfSecretaries + numOfManagers + numOfEngineers + numOfDirectors; i++) {
             employees.add(initDirector());
         }
         return employees;
     }
-
-//    public static double avgSalary(List<Employee> employees) {
-//        int sum = 0;
-//        int count = 0;
-//        for (Employee employee : employees) {
-//            sum += employee.getSalary();
-//            count++;
-//        }
-//        return sum / count;
-//    }
-//
-//    public static double avgManagementSalary(List<Employee> employees) {
-//        int sum = 0;
-//        int count = 0;
-//        for (Employee employee : employees) {
-//            if (employee instanceof Manager || employee instanceof Director) {
-//                sum += employee.getSalary();
-//                count++;
-//            }
-//        }
-//        return sum / count;
-//    }
-//
-//    public static void display(List<Employee> employees) {
-//        for (Employee employee : employees) {
-//            System.out.println(employee);
-//        }
-//    }
 
 }
